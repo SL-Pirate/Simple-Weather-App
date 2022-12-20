@@ -5,6 +5,6 @@ Terminal=false
 Name=Simple-Weather-App
 GenericName=Simple-Weather-App
 Comment=Yet Another Simple Weather App
-Exec=/usr/bin/simple_weather_app
+Exec=/opt/simple_weather_app
 Icon=/usr/share/simple_weather_app.png
 Categories=Utility;
