@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           output = "Waiting for network!";
           submitBtnEnabled = false;
+          FocusScope.of(context).unfocus();
         });
         Weather ans = await RestApiSrvc().callApi(_inputCtrl.text);
         out = ans.getWeather();

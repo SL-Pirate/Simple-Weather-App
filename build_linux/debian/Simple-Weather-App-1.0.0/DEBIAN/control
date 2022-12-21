@@ -1,8 +1,0 @@
-Package: Simple-Weather-App
-Version: 1.0.0 
-Architecture: amd64 
-Essential: no 
-Priority: optional 
-Depends: 
-Maintainer: isiraherath626@gmail.com
-Description: Yet another simple weathe app
