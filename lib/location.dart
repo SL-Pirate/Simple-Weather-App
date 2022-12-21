@@ -4,6 +4,7 @@ class LocationSrvc {
   static LocationSrvcStatus _status = LocationSrvcStatus.unknown;
   static LocationPermission? _perms = LocationPermission.denied;
   static bool _geoLocationEnabled = false;
+  static bool isNotLinux = false;
 
   //run in initstate of the app
   static Future<LocationSrvcStatus> get initStatus async {
@@ -40,7 +41,8 @@ class LocationSrvc {
   }
 
   static Future<Position> get currentPos async {
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.low);
   }
 }
 

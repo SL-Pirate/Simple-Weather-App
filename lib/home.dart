@@ -15,8 +15,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    if (!Platform.isLinux){
-      getInitWeather();
+    try{
+      if (!Platform.isLinux){
+        LocationSrvc.isNotLinux = true;
+        getInitWeather();
+      }
+    }
+    catch (E){
+      LocationSrvc.isNotLinux = true;
     }
   }
 
