@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-      if (!Platform.isLinux){
+      if (LocationSrvc.isNotLinux){
         return Scaffold(
         appBar: AppBar(
           title: const Text("Simple Weather App", style: TextStyle(color: Colors.black)),
