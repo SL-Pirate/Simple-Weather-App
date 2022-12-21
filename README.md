@@ -8,7 +8,7 @@ Install flutter,
 
 clone the repo to your computer with
 
-open ApiKey file and insert your openweathermap.org API key, save and close it
+open `Api.key` file and insert your openweathermap.org API key, save and close it
 
 open terminal and run the followind commands
 

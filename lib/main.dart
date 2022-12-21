@@ -3,7 +3,7 @@ import 'package:simple_weather_app/splash_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  await dotenv.load(fileName: "ApiKey");
+  await dotenv.load(fileName: "Api.key");
   runApp(const MyApp());
 }
 

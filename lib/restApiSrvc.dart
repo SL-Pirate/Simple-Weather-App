@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:simple_weather_app/weather.dart';
@@ -21,7 +22,26 @@ class RestApiSrvc {
         throw HttpError(json.decode(response.body));
       }
       Map<String, dynamic> result = json.decode(response.body);
-      return Weather(result, city);
+      return Weather(result);
+    } else {
+      return WeatherErr();
+    }
+  }
+
+   Future<Weather> callApiGeo(Position location) async {
+    if (_apiKey.isNotEmpty) {
+      String reqLink =
+          "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${_getApiKey()}&units=$units";
+      final response = await http.get(Uri.parse(reqLink));
+
+      if (response.statusCode == 401) {
+        return WeatherErr();
+      }
+      if (response.statusCode != 200) {
+        throw HttpError(json.decode(response.body));
+      }
+      Map<String, dynamic> result = json.decode(response.body);
+      return Weather(result);
     } else {
       return WeatherErr();
     }
