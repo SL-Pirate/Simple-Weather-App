@@ -22,5 +22,5 @@ Replace <target OS> with either linux, Android, IOS, Windows, Mac or web (as a w
 
 NOTE: When building for IOS and MAC you might run into error because I have no way of testing for those platforms since I do not own such devices myself. 
 
-for building AppImage for linux please refer [here](https://github.com/SL-Pirate/Simple-Weather-App/blob/master/build_linux/AppImage/README.md)
+for building AppImage for linux please refer [here](https://github.com/SL-Pirate/Simple-Weather-App/blob/master/build_linux/README.md)
 
