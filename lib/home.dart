@@ -3,6 +3,8 @@ import 'package:simple_weather_app/location.dart';
 import 'package:simple_weather_app/restApiSrvc.dart';
 import 'package:simple_weather_app/weather.dart';
 import 'dart:io';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:simple_weather_app/places.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -51,15 +53,41 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //input fields
-                const SizedBox(height: 20),
                 Container(
-                  height: MediaQuery.of(context).size.height/4,
-                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                  child: Center(
-                    child:  TextFormField(
-                      controller: _inputCtrl,
-                        decoration: const InputDecoration(labelText: "Please enter your city", hintText: "Eg: London"),
-                      )
+                    height: MediaQuery.of(context).size.height/4,
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                    child: Center(
+                      child: TypeAheadField<Suggestion>(
+                        textFieldConfiguration: TextFieldConfiguration(
+                          controller: _inputCtrl,
+                          decoration: const InputDecoration(
+                              alignLabelWithHint: true,
+                              hintText: 'Enter city name',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(fontSize: 20),
+                              isCollapsed: true),
+                        ),
+                        hideOnEmpty: true,
+                        hideOnLoading: true,
+                        suggestionsCallback: (pattern) async {
+                          return await PlacesSrvc('23456').fetchSuggestons(pattern);
+                        },
+                        itemBuilder: (context, suggestion) {
+                          return GestureDetector(
+                              onTap: (){
+                                _inputCtrl.text = suggestion.description;
+                                getWeather();
+                              },
+                              child: ListTile(
+                                  title :Text(
+                                    suggestion.description,
+                                    style: const TextStyle(color: Colors.black),
+                                  )
+                              )
+                          );
+                        },
+                        onSuggestionSelected: (selectedSuggestion){},
+                      ),
                     )
                 ),
                 const SizedBox(height: 20),
@@ -125,16 +153,45 @@ class _HomePageState extends State<HomePage> {
               children: [
                 //input fields
                 const SizedBox(height: 20),
+
                 Container(
                   height: MediaQuery.of(context).size.height/4,
                   margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                   child: Center(
-                    child:  TextFormField(
-                      controller: _inputCtrl,
-                        decoration: const InputDecoration(labelText: "Please enter your city", hintText: "Eg: London"),
-                      )
-                    )
+                    child: TypeAheadField<Suggestion>(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        controller: _inputCtrl,
+                        decoration: const InputDecoration(
+                            alignLabelWithHint: true,
+                            hintText: 'Enter city name',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 20),
+                            isCollapsed: true),
+                      ),
+                      hideOnEmpty: true,
+                      hideOnLoading: true,
+                      suggestionsCallback: (pattern) async {
+                        return await PlacesSrvc('23456').fetchSuggestons(pattern);
+                      },
+                      itemBuilder: (context, suggestion) {
+                        return GestureDetector(
+                            onTap: (){
+                              _inputCtrl.text = suggestion.description;
+                              getWeather();
+                            },
+                            child: ListTile(
+                                title :Text(
+                                  suggestion.description,
+                                  style: const TextStyle(color: Colors.black),
+                                )
+                            )
+                        );
+                      },
+                      onSuggestionSelected: (selectedSuggestion){},
+                    ),
+                  )
                 ),
+
                 const SizedBox(height: 20),
                 
                 //Button get from txt-in
@@ -231,7 +288,6 @@ class _HomePageState extends State<HomePage> {
 
   void getInitWeather() async {
     if (await LocationSrvc.initStatus == LocationSrvcStatus.enabled){
-      print(await LocationSrvc.initStatus);
       getGeoWeather();
     }
   }
