@@ -1,43 +1,57 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationSrvc {
-  static LocationSrvcStatus _status = LocationSrvcStatus.unknown;
+  static bool _status = false;
   static LocationPermission? _perms = LocationPermission.denied;
   static bool _geoLocationEnabled = false;
   static bool isNotLinux = false;
 
+  
   //run in initstate of the app
-  static Future<LocationSrvcStatus> get initStatus async {
-    _perms = await Geolocator.checkPermission();
+  static Future<bool> get initStatus async {
+//    _perms = await Geolocator.checkPermission();
     _geoLocationEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!_geoLocationEnabled) {
-      _status = LocationSrvcStatus.disabled;
-    } else if (_perms != LocationPermission.denied) {
-      _status = LocationSrvcStatus.denied;
-    } else if (_perms != LocationPermission.deniedForever) {
-      _status = LocationSrvcStatus.deniedForever;
-    } else {
-      _status = LocationSrvcStatus.enabled;
+    if (_geoLocationEnabled) {
+      _perms = await Geolocator.checkPermission();
+      if (_perms == LocationPermission.always || _perms == LocationPermission.whileInUse){
+        _status = true;
+        return _status;
+      }
+      else{
+        _status = false;
+        return _status;
+      }
     }
-    return _status;
+    else{
+      _status = false;
+      return _status;
+    }
   }
-
-  static Future<LocationSrvcStatus> getPerms() async {
-    if (_status != LocationSrvcStatus.enabled || _status != LocationSrvcStatus.deniedForever) {
+    
+  static Future<bool> getPerms() async {
+    if (!_status) {
       _perms = await Geolocator.requestPermission();
-      if (_perms == LocationPermission.deniedForever) {
-        _status = LocationSrvcStatus.deniedForever;
-      } else if (_perms == LocationPermission.denied) {
-        _status = LocationSrvcStatus.denied;
+      if(_perms == LocationPermission.always || _perms == LocationPermission.whileInUse){
+        _status = true;
+        return _status;
       } else {
-        _status = LocationSrvcStatus.enabled;
+        _status = false;
+        return _status;
       }
     }
     return _status;
   }
 
-  static LocationSrvcStatus get status {
+  static Future<LocationPermission> get perms async{
+    return Geolocator.checkPermission();
+  } 
+
+  static bool get status {
     return _status;
+  }
+
+  static bool get geoLocationEnabled{
+    return _geoLocationEnabled;
   }
 
   static Future<Position> get currentPos async {
@@ -45,5 +59,3 @@ class LocationSrvc {
         desiredAccuracy: LocationAccuracy.low);
   }
 }
-
-enum LocationSrvcStatus { enabled, disabled, denied, deniedForever, unknown }
