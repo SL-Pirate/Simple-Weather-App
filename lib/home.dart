@@ -268,7 +268,14 @@ class _HomePageState extends State<HomePage> {
           }
         }
         else if(LocationSrvc.status == LocationSrvcStatus.disabled){
-          out = "GPS disabled";
+          if(await LocationSrvc.getPerms() == LocationSrvcStatus.enabled) {
+            Weather ans = await RestApiSrvc().callApiGeo(
+                await LocationSrvc.currentPos);
+            out = ans.getWeather();
+          }
+          else{
+            out = "GPS disabled!\nPlease turn on GPS from \ndevice settings";
+          }
         }
         else if(LocationSrvc.status == LocationSrvcStatus.deniedForever){
           out = "Location permissions denied forever!. \nWe can not access GPS unless you manually \nallow us Location permissions";

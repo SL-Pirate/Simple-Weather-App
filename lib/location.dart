@@ -23,7 +23,7 @@ class LocationSrvc {
   }
 
   static Future<LocationSrvcStatus> getPerms() async {
-    if (_status == LocationSrvcStatus.denied) {
+    if (_status != LocationSrvcStatus.enabled || _status != LocationSrvcStatus.deniedForever) {
       _perms = await Geolocator.requestPermission();
       if (_perms == LocationPermission.deniedForever) {
         _status = LocationSrvcStatus.deniedForever;
