@@ -235,19 +235,26 @@ class _HomePageState extends State<HomePage> {
     String out;
     try {
       setState(() {
-        output = "Waiting for network!";
+        output = "Acessing geo-location";
         submitBtnEnabled = false;
         FocusScope.of(context).unfocus();
       });
+      await LocationSrvc.getPerms();
       if (LocationSrvc.status) {
         Weather ans =
             await RestApiSrvc().callApiGeo(await LocationSrvc.currentPos);
+        setState(() {
+          output = "Waiting for network!";
+        });
         out = ans.getWeather();
       } else {
         await LocationSrvc.getPerms();
         if (LocationSrvc.status) {
           Weather ans =
               await RestApiSrvc().callApiGeo(await LocationSrvc.currentPos);
+          setState(() {
+            output = "Waiting for network!";
+          });
           out = ans.getWeather();
         } else {
           LocationPermission perms = await LocationSrvc.perms;
@@ -256,7 +263,7 @@ class _HomePageState extends State<HomePage> {
           } else if (perms == LocationPermission.deniedForever) {
             out =
                 "Location permissions denied forever!. \nWe can not access GPS unless you manually \nallow us Location permissions";
-          } else if (!LocationSrvc.geoLocationEnabled) {
+          } else if (!await LocationSrvc.geoLocationEnabled) {
             out = "GPS disabled!\nPlease turn on GPS from \ndevice settings";
           } else {
             out = "Current location unknown\nLocationSrvcStatus: ${LocationSrvc.status}";
