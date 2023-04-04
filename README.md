@@ -1,6 +1,11 @@
-# simple_weather_app
+# Simple Weather App
 
 Yet another simple weather application.
+
+## Try the web version
+- Autocomplete Suggestions not working!
+
+[Simple Weather App - on the web](https://sl-pirate.github.io/Simple-Weather-App/) - https://SL-Pirate.github.io/Simple-Weather-App/
 
 ## Screenshots
 ![Screenshot1](https://raw.githubusercontent.com/SL-Pirate/Simple-Weather-App/master/Screenshots/Screenshot_2023-04-03-18-57-07.png)
